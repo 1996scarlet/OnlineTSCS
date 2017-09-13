@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+@Scripts.Render("~/bundles/dplay")
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>Use this area to provide additional information.</p>
+<div id="player1"></div>
+<script>
+    var dp = new DPlayer({
+        element: document.getElementById('player1'),
+        video: {
+            url: 'https://api.prprpr.me/dplayer/video/bilibili?aid=14408656',
+            pic: 'dplayer.png'
+        },
+        danmaku: {
+            id: 'f896aeaasas7686b6f805e0834',
+            api: 'https://api.prprpr.me/dplayer/',
+            addition: ['https://api.prprpr.me/dplayer/bilibili?cid=23508509']
+        }
+    });
+</script>

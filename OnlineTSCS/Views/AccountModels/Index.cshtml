@@ -1,0 +1,125 @@
+﻿@model IEnumerable<OnlineTSCS.Models.AccountModel>
+
+@{
+    ViewBag.Title = "用户信息管理";
+}
+
+<h2>>@ViewBag.Title</h2>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    用户信息查询
+</button>
+<hr />
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        @using (Html.BeginForm("Index", "AccountModels", FormMethod.Get))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">查询条件</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.EnumDropDownListFor(model => model.FirstOrDefault().Type, htmlAttributes: new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.TextBox("name", "", htmlAttributes: new { @class = "form-control", placeholder = "用户账号" })
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.TextBox("school", "", htmlAttributes: new { @class = "form-control", placeholder = "单位(学校)" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.TextBox("mobile", "", htmlAttributes: new { @class = "form-control", placeholder = "手机号码" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
+                    <input type="submit" value="查询" class="btn btn-success" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Credit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.School)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mobile)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Type)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Credit)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.School)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mobile)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("修改密码", "PasswordEdit", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>
