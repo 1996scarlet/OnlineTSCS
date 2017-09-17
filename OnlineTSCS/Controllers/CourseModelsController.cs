@@ -35,6 +35,24 @@ namespace OnlineTSCS.Controllers
             return View(await courses.ToListAsync());
         }
 
+        // GET: ForumModels/Frozen/5
+        public async Task<ActionResult> Frozen(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            CourseModel courseModel = await db.CourseModels.FindAsync(id);
+            if (courseModel == null)
+            {
+                return HttpNotFound();
+            }
+            courseModel.Frozen = !courseModel.Frozen;
+            db.Entry(courseModel).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Comment(int courseId, string comment)
@@ -220,7 +238,7 @@ namespace OnlineTSCS.Controllers
             });
 
             await db.SaveChangesAsync();
-            return RedirectToAction("Check");
+            return RedirectToAction("Index");
         }
 
         // GET: CourseModels/Delete/5

@@ -6,15 +6,17 @@
 
 <div class="jumbotron" style="background-color:lightcoral">
     <h2 style="color:white">@ViewBag.Title</h2>
-    <button class="btn btn-warning" data-toggle="modal" data-target="#myModal" type="button">
-        发  帖
-    </button>
-    <button class="btn btn-info" data-toggle="modal" data-target="#myModal" type="button">
-        搜  索
-    </button>
-    @Html.ActionLink("按名称排序", "Index", routeValues: new { mode = 0 }, htmlAttributes: new { @class = "btn btn-default" })
-    @Html.ActionLink("按时间排序", "Index", routeValues: new { mode = 1 }, htmlAttributes: new { @class = "btn btn-default" })
-    @Html.ActionLink("按回复排序", "Index", routeValues: new { mode = 2 }, htmlAttributes: new { @class = "btn btn-default" })
+    <p class="lead">
+        <button class="btn btn-warning" data-toggle="modal" data-target="#myModal" type="button">
+            发  帖
+        </button>
+        @Html.ActionLink("名称", "Index", routeValues: new { mode = 0 }, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink("时间", "Index", routeValues: new { mode = 1 }, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink("回复", "Index", routeValues: new { mode = 2 }, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink("非冻结", "Index", routeValues: new { mode = 3 }, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink("非举报", "Index", routeValues: new { mode = 4 }, htmlAttributes: new { @class = "btn btn-default" })
+        @Html.ActionLink("显示所有", "Index", routeValues: new { mode = 5 }, htmlAttributes: new { @class = "btn btn-default" })
+    </p>
 </div>
 
 <div>
@@ -23,7 +25,18 @@
         <hr />
         <div class="media">
             <div class="media-body">
-                <h4 class="media-heading">@Html.ActionLink(item.Title, "Details", new { id = item.ForumItemId })&nbsp;<span class="badge">@item.ForumComments.Count 回复</span></h4>
+                <h4 class="media-heading">
+                    @if (item.Frozen)
+                    {
+                        <span class="label label-info">已冻结</span>
+                    }
+                    @if (item.Reported)
+                    {
+                        <span class="label label-danger">被举报</span>
+                    }
+                    @Html.ActionLink(item.Title, "Details", new { id = item.ForumItemId })&nbsp;
+                    <span class="badge">@item.ForumComments.Count 回复</span>&nbsp;
+                </h4>
                 <p class="text-muted">@Html.DisplayFor(modelItem => item.Comment)</p>
                 <p class="media-bottom">
                     @Html.ActionLink(item.Account.AccountName, "Details", "AccountModels", routeValues: new { id = item.Id }, htmlAttributes: null) - @Html.DisplayFor(modelItem => item.CommentDate)

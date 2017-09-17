@@ -17,11 +17,11 @@ namespace OnlineTSCS.Controllers
         private OTSCSModel db = new OTSCSModel();
 
         // GET: AccountModels
-        public async Task<ActionResult> Index(int? type, string name, string school, string mobile)
+        public async Task<ActionResult> Index(string credit, string name, string school, string mobile)
         {
             var accounts = db.AccountModels.AsQueryable();
 
-            if (type != null) accounts = accounts.Where(x => (int)x.Type == type);
+            if (!String.IsNullOrEmpty(credit)) accounts = accounts.Where(x => x.Credit.Contains(credit));
 
             if (!String.IsNullOrEmpty(name)) accounts = accounts.Where(x => x.AccountName.Contains(name));
 
@@ -114,6 +114,7 @@ namespace OnlineTSCS.Controllers
             return View(accountModel);
         }
 
+        [Authentication(Checked = false)]
         // GET: AccountModels/Register
         public ActionResult Register()
         {
@@ -123,6 +124,8 @@ namespace OnlineTSCS.Controllers
         // POST: AccountModels/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authentication(Checked = false)]
+
         public async Task<ActionResult> Register([Bind(Include = "Id,AccountName,Password,Type")] AccountModel accountModel)
         {
             if (ModelState.IsValid && !await db.AccountModels.Where(x => x.AccountName == accountModel.AccountName).AnyAsync())

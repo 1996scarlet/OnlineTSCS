@@ -280,6 +280,7 @@
     <Content Include="Views\HomeworkCommentModels\Details.cshtml" />
     <Content Include="Views\HomeworkCommentModels\Edit.cshtml" />
     <Content Include="Views\HomeworkCommentModels\Index.cshtml" />
+    <Content Include="Views\ForumModels\Manage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

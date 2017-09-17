@@ -24,9 +24,89 @@ namespace OnlineTSCS.Controllers
                 case 0: return View(await forumModels.OrderBy(x => x.Title).ToListAsync());
                 case 1: return View(await forumModels.OrderByDescending(x => x.CommentDate).ToListAsync());
                 case 2: return View(await forumModels.OrderByDescending(x => x.ForumComments.Count).ToListAsync());
+                case 3: return View(await forumModels.Where(x=>!x.Frozen).ToListAsync());
+                case 4: return View(await forumModels.Where(x=>!x.Reported).ToListAsync());
+                case 5:
                 default: return View(await forumModels.ToListAsync());
             }
 
+        }
+
+        // GET: ForumModels/Report/5
+        public async Task<ActionResult> Report(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ForumModel forumModel = await db.ForumModels.FindAsync(id);
+            if (forumModel == null)
+            {
+                return HttpNotFound();
+            }
+            forumModel.Reported = !forumModel.Reported;
+            db.Entry(forumModel).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            return RedirectToAction("Manage");
+        }
+
+        // GET: ForumModels/Frozen/5
+        public async Task<ActionResult> Frozen(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ForumModel forumModel = await db.ForumModels.FindAsync(id);
+            if (forumModel == null)
+            {
+                return HttpNotFound();
+            }
+            forumModel.Frozen = !forumModel.Frozen;
+            db.Entry(forumModel).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            return RedirectToAction("Manage");
+        }
+
+        // GET: ForumModels/CommentReport/5
+        public async Task<ActionResult> CommentReport(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ForumCommentModel forumCommentModel = await db.ForumCommentModels.FindAsync(id);
+            if (forumCommentModel == null)
+            {
+                return HttpNotFound();
+            }
+            forumCommentModel.Reported = !forumCommentModel.Reported;
+            db.Entry(forumCommentModel).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            return RedirectToAction("Manage");
+        }
+
+        // GET: ForumModels/CommentFrozen/5
+        public async Task<ActionResult> CommentFrozen(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            ForumCommentModel forumCommentModel = await db.ForumCommentModels.FindAsync(id);
+            if (forumCommentModel == null)
+            {
+                return HttpNotFound();
+            }
+            forumCommentModel.Frozen = !forumCommentModel.Frozen;
+            db.Entry(forumCommentModel).State = EntityState.Modified;
+            await db.SaveChangesAsync();
+            return RedirectToAction("Manage");
+        }
+
+        public async Task<ActionResult> Manage()
+        {
+            return View(await db.ForumModels.Include(f => f.Account).ToListAsync());
         }
 
         [HttpPost]
@@ -40,7 +120,7 @@ namespace OnlineTSCS.Controllers
                     Frozen = false,
                     Reported = false,
                     Id = int.Parse(Session["Id"].ToString()),
-                    Comment = comment.Substring(0, 256),
+                    Comment = comment,
                     Title = title,
                     CommentDate = DateTime.Now
                 });

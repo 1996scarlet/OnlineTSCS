@@ -24,13 +24,37 @@
 
 <div class="page-header">
     <hr />
-    <div class="alert alert-warning alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-        <strong>注意：请文明评论!</strong> 恶意污染评论区的用户会被管理员请去喝茶
-    </div>
-    <button class="btn btn-success btn-block" data-toggle="modal" data-target="#myModal" type="button">
-        发表评论
-    </button>
+
+    @if (Model.Frozen)
+    {
+        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <strong>警告：该主题已被冻结!</strong> 无法在被冻结的主题下发表评论
+        </div>
+        <button class="btn btn-info btn-block" disabled="disabled" data-toggle="modal" data-target="#myModal" type="button">
+            发表评论
+        </button>
+    }
+    else if (Model.Reported)
+    {
+        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <strong>警告：该主题已被举报!</strong> 请小心评论，否则有可能被牵连
+        </div>
+        <button class="btn btn-danger btn-block" data-toggle="modal" data-target="#myModal" type="button">
+            发表评论
+        </button>
+    }
+    else
+    {
+        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <strong>注意：请文明评论!</strong> 恶意污染评论区的用户会被管理员请去喝茶
+        </div>
+        <button class="btn btn-success btn-block" data-toggle="modal" data-target="#myModal" type="button">
+            发表评论
+        </button>
+    }
 </div>
 
 @foreach (var item in Model.ForumComments)
@@ -42,7 +66,17 @@
             </a>
         </div>
         <div class="media-body">
-            <h5 class="media-heading">@item.Account.AccountName - @item.CommentDate</h5>
+            <h5 class="media-heading">
+                @item.Account.AccountName - @item.CommentDate &nbsp;
+                @if (item.Frozen)
+                {
+                    <span class="label label-info">已冻结</span>
+                }
+                @if (item.Reported)
+                {
+                    <span class="label label-danger">被举报</span>
+                }
+            </h5>
             <p class="text-muted">@item.Comment</p>
         </div>
     </div>

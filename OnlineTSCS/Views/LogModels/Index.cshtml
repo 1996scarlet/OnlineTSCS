@@ -1,14 +1,16 @@
 ﻿@model IEnumerable<OnlineTSCS.Models.LogModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "系统日志";
 }
 
-<h2>Index</h2>
+<div class="jumbotron" style="background-color:lightgoldenrodyellow">
+    <h2>@ViewBag.Title</h2>
+    <p class="lead">
+        暂时只记录AccountModels控制器的相关操作<br />如需要记录更多Action请添加Fliter到对应Controller
+    </p>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -21,37 +23,38 @@
             @Html.DisplayNameFor(model => model.ActionParameters)
         </th>
         <th>
+            记录日期
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.AccessDate)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.ActionAccount)
         </th>
-        <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ActionName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ControllerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ActionParameters)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AccessDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ActionAccount)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(item.ActionName, "Details", "LogModels", routeValues: new { id = item.Id }, htmlAttributes: new { @class = "btn btn-xs btn-info"})
+            </td>
+            <td>
+                <span class="label label-default">@item.ControllerName</span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionParameters)
+            </td>
+            <td>
+                <span class="label label-success">@item.AccessDate.ToLongDateString()</span>
+            </td>
+            <td>
+                <span class="label label-warning">@item.AccessDate.ToLongTimeString()</span>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActionAccount)
+            </td>
+        </tr>
+    }
 
 </table>

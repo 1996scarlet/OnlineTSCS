@@ -1,0 +1,378 @@
+﻿@model IEnumerable<OnlineTSCS.Models.ForumModel>
+
+@{
+    ViewBag.Title = "论坛管理";
+}
+
+<div class="jumbotron" style="background-color:lightpink">
+    <h2 style="color:white">@ViewBag.Title</h2>
+    <p style="color:white" class="lead">
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">关键字检索</button>
+    </p>
+</div>
+<div class="alert alert-info alert-dismissible fade in" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+    <strong>提示：</strong>使用搜索功能可以提高效率
+</div>
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#one" aria-controls="one" role="tab" data-toggle="tab">状态正常的主题</a></li>
+        <li role="presentation"><a href="#two" aria-controls="two" role="tab" data-toggle="tab">已被举报但未冻结的主题</a></li>
+        <li role="presentation"><a href="#three" aria-controls="three" role="tab" data-toggle="tab">已被冻结的主题</a></li>
+    </ul>
+
+    <div class="tab-content">
+
+        <div role="tabpanel" class="tab-pane fade in active" id="one">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        回复数量
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Account.AccountName)
+                    </th>
+                    <th>
+                        发帖日期
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CommentDate)
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.Where(x => !x.Frozen && !x.Reported))
+                {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.Title, "Details", new { id = item.ForumItemId })
+                    </td>
+                    <td>
+                        <span class="label label-default">@item.ForumComments.Count</span>
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.Account.AccountName, "Details", "AccountModels", routeValues: new { id = item.Id }, htmlAttributes: null)
+                    </td>
+                    <td>
+                        <span class="label label-success">@item.CommentDate.ToLongDateString()</span>
+                    </td>
+                    <td>
+                        <span class="label label-warning">@item.CommentDate.ToLongTimeString()</span>
+                    </td>
+                    <td>
+                        @Html.ActionLink("举报", "Report", routeValues: new { id = item.ForumItemId }, htmlAttributes: new { @class = "btn btn-xs btn-danger"})
+                        @Html.ActionLink("冻结", "Frozen", routeValues: new { id = item.ForumItemId }, htmlAttributes: new { @class = "btn btn-xs btn-info" })
+                    </td>
+                </tr>
+                }
+            </table>
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="two">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        回复数量
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Account.AccountName)
+                    </th>
+                    <th>
+                        发帖日期
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CommentDate)
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.Where(x => !x.Frozen && x.Reported))
+                {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.Title, "Details", new { id = item.ForumItemId })
+                    </td>
+                    <td>
+                        <span class="label label-default">@item.ForumComments.Count</span>
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.Account.AccountName, "Details", "AccountModels", routeValues: new { id = item.Id }, htmlAttributes: null)
+                    </td>
+                    <td>
+                        <span class="label label-success">@item.CommentDate.ToLongDateString()</span>
+                    </td>
+                    <td>
+                        <span class="label label-warning">@item.CommentDate.ToLongTimeString()</span>
+                    </td>
+                    <td>
+                        @Html.ActionLink("平反", "Report", routeValues: new { id = item.ForumItemId }, htmlAttributes: new { @class = "btn btn-xs btn-primary" })
+                        @Html.ActionLink("冻结", "Frozen", routeValues: new { id = item.ForumItemId }, htmlAttributes: new { @class = "btn btn-xs btn-info" })
+                    </td>
+                </tr>
+                }
+            </table>
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="three">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        回复数量
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Account.AccountName)
+                    </th>
+                    <th>
+                        发帖日期
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CommentDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Reported)
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.Where(x => x.Frozen))
+                {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.Title, "Details", new { id = item.ForumItemId })
+                    </td>
+                    <td>
+                        <span class="label label-default">@item.ForumComments.Count</span>
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.Account.AccountName, "Details", "AccountModels", routeValues: new { id = item.Id }, htmlAttributes: null)
+                    </td>
+                    <td>
+                        <span class="label label-success">@item.CommentDate.ToLongDateString()</span>
+                    </td>
+                    <td>
+                        <span class="label label-warning">@item.CommentDate.ToLongTimeString()</span>
+                    </td>
+                    <th>
+                        @Html.DisplayFor(model => item.Reported)
+                    </th>
+                    <td>
+                        @Html.ActionLink("恢复", "Frozen", routeValues: new { id = item.ForumItemId }, htmlAttributes: new { @class = "btn btn-xs btn-info" })
+                    </td>
+                </tr>
+                }
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<hr />
+
+<div class="alert alert-warning alert-dismissible fade in" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+    <strong>提示：</strong>多数情况下冻结比举报更有效
+</div>
+
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#four" aria-controls="four" role="tab" data-toggle="tab">状态正常的回复</a></li>
+        <li role="presentation"><a href="#five" aria-controls="five" role="tab" data-toggle="tab">已被举报但未冻结的回复</a></li>
+        <li role="presentation"><a href="#six" aria-controls="six" role="tab" data-toggle="tab">已被冻结的回复</a></li>
+    </ul>
+
+    <div class="tab-content">
+
+        <div role="tabpanel" class="tab-pane fade in active" id="four">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Account.AccountName)
+                    </th>
+                    <th>
+                        帖子
+                    </th>
+                    <th>
+                        回复内容
+                    </th>
+                    <th>
+                        回复日期
+                    </th>
+                    <th>
+                        回复时间
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    foreach (var posting in item.ForumComments.Where(x => !x.Frozen && !x.Reported))
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(posting.Account.AccountName, "Details", "AccountModels", routeValues: new { id = posting.Id }, htmlAttributes: null)
+                            </td>
+                            <td>
+                                @Html.ActionLink("ID:" + item.Id, "Details", routeValues: new { id = item.ForumItemId }, htmlAttributes: new { @class = "btn btn-xs btn-default" })
+                            </td>
+                            <td>
+                                @posting.Comment
+                            </td>
+                            <td>
+                                <span class="label label-success">@item.CommentDate.ToLongDateString()</span>
+                            </td>
+                            <td>
+                                <span class="label label-warning">@item.CommentDate.ToLongTimeString()</span>
+                            </td>
+                            <td>
+                                @Html.ActionLink("举报", "CommentReport", routeValues: new { id = posting.ForumCommentId }, htmlAttributes: new { @class = "btn btn-xs btn-danger" })
+                                @Html.ActionLink("冻结", "CommentFrozen", routeValues: new { id = posting.ForumCommentId }, htmlAttributes: new { @class = "btn btn-xs btn-info" })
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="five">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Account.AccountName)
+                    </th>
+                    <th>
+                        帖子
+                    </th>
+                    <th>
+                        回复内容
+                    </th>
+                    <th>
+                        回复日期
+                    </th>
+                    <th>
+                        回复时间
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    foreach (var posting in item.ForumComments.Where(x => !x.Frozen && x.Reported))
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(posting.Account.AccountName, "Details", "AccountModels", routeValues: new { id = posting.Id }, htmlAttributes: null)
+                            </td>
+                            <td>
+                                @Html.ActionLink("ID:" + item.Id, "Details", routeValues: new { id = item.ForumItemId }, htmlAttributes: new { @class = "btn btn-xs btn-default" })
+                            </td>
+                            <td>
+                                @posting.Comment
+                            </td>
+                            <td>
+                                <span class="label label-success">@item.CommentDate.ToLongDateString()</span>
+                            </td>
+                            <td>
+                                <span class="label label-warning">@item.CommentDate.ToLongTimeString()</span>
+                            </td>
+                            <td>
+                                @Html.ActionLink("平反", "CommentReport", routeValues: new { id = posting.ForumCommentId }, htmlAttributes: new { @class = "btn btn-xs btn-primary" })
+                                @Html.ActionLink("冻结", "CommentFrozen", routeValues: new { id = posting.ForumCommentId }, htmlAttributes: new { @class = "btn btn-xs btn-info" })
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="six">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Account.AccountName)
+                    </th>
+                    <th>
+                        帖子
+                    </th>
+                    <th>
+                        回复内容
+                    </th>
+                    <th>
+                        回复日期
+                    </th>
+                    <th>
+                        回复时间
+                    </th>
+                    <th>
+                        被举报
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    foreach (var posting in item.ForumComments.Where(x => x.Frozen))
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(posting.Account.AccountName, "Details", "AccountModels", routeValues: new { id = posting.Id }, htmlAttributes: null)
+                            </td>
+                            <td>
+                                @Html.ActionLink("ID:" + item.Id, "Details", routeValues: new { id = item.ForumItemId }, htmlAttributes: new { @class = "btn btn-xs btn-default" })
+                            </td>
+                            <td>
+                                @posting.Comment
+                            </td>
+                            <td>
+                                <span class="label label-success">@item.CommentDate.ToLongDateString()</span>
+                            </td>
+                            <td>
+                                <span class="label label-warning">@item.CommentDate.ToLongTimeString()</span>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => posting.Reported)
+                            </td>
+                            <td>
+                                @Html.ActionLink("恢复", "CommentFrozen", routeValues: new { id = posting.ForumCommentId }, htmlAttributes: new { @class = "btn btn-xs btn-info" })
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

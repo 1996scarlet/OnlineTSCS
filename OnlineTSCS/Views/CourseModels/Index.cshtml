@@ -21,6 +21,13 @@
         <strong>提示：</strong>针对教师用户组只显示你自己提交的课程
     </div>
 }
+else
+{
+    <div class="alert alert-info alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <strong>提示：</strong>请及时审核教师已提交的课程
+    </div>
+}
 
 <div>
 
@@ -29,6 +36,10 @@
         <li role="presentation" class="active"><a href="#receive" aria-controls="receive" role="tab" data-toggle="tab">状态正常的课程</a></li>
         <li role="presentation"><a href="#send" aria-controls="send" role="tab" data-toggle="tab">正在审核的课程</a></li>
         <li role="presentation"><a href="#frozen" aria-controls="frozen" role="tab" data-toggle="tab">已被冻结的课程</a></li>
+        @if (!flag)
+        {
+            <li role="presentation"><a href="#mapping" aria-controls="mapping" role="tab" data-toggle="tab">选课映射</a></li>
+        }
     </ul>
 
     <div class="tab-content">
@@ -90,7 +101,8 @@
                             @Html.ActionLink("ID:" + item.JudgeId, "Details", "AccountModels", routeValues: new { id = item.JudgeId }, htmlAttributes: new { @class = "btn btn-danger btn-xs" })
                         </td>
                         <td>
-                            @Html.ActionLink("编辑", "Edit", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                            @Html.ActionLink("编辑", "Edit", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-primary btn-xs" })
+                            @Html.ActionLink("冻结", "Frozen", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
                         </td>
                     </tr>
                 }
@@ -132,7 +144,7 @@
                             @Html.DisplayFor(modelItem => item.Type)
                         </td>
                         <td>
-                            <span class="label label-success">@item.Capacity</span>
+                            <span class="label label-default">@item.Capacity</span>
                         </td>
                         <td>
                             <span class="label label-warning">@item.Lesson</span>
@@ -141,7 +153,16 @@
                             @item.StartDate.ToLongDateString()
                         </td>
                         <td>
-                            @Html.ActionLink("编辑", "Edit", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                            @if (!flag)
+                            {
+                                @Html.ActionLink("通过", "Pass", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-success btn-xs" })
+                                <span></span>
+                                @Html.ActionLink("冻结", "Frozen", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                            }
+                            else
+                            {
+                                @Html.ActionLink("编辑", "Edit", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-primary btn-xs" })
+                            }
                         </td>
                     </tr>
                 }
@@ -171,34 +192,82 @@
                     <th>
                         @Html.DisplayNameFor(model => model.StartDate)
                     </th>
+                    <th></th>
                 </tr>
 
                 @foreach (var item in selected.Where(x => x.Frozen))
                 {
-                    <tr>
-                        <td>
-                            @Html.ActionLink(item.CourseName, "Details", new { id = item.CourseId })
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Type)
-                        </td>
-                        <td>
-                            <span class="label label-success">@item.Capacity</span>
-                        </td>
-                        <td>
-                            <span class="label label-warning">@item.Lesson</span>
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Checked)
-                        </td>
-                        <td>
-                            @item.StartDate.ToLongDateString()
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.CourseName, "Details", new { id = item.CourseId })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </td>
+                    <td>
+                        <span class="label label-default">@item.Capacity</span>
+                    </td>
+                    <td>
+                        <span class="label label-warning">@item.Lesson</span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Checked)
+                    </td>
+                    <td>
+                        @item.StartDate.ToLongDateString()
+                    </td>
+                    <td>
+                        @if (!flag)
+                            {
+                        @Html.ActionLink("恢复", "Frozen", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                            }
+                    </td>
+                </tr>
                 }
             </table>
 
         </div>
+
+        @if (!flag)
+        {
+            <div role="tabpanel" class="tab-pane fade" id="mapping">
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            选课账号
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Type)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CourseName)
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        foreach (var mapping in item.Mapping)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.ActionLink(mapping.Account.AccountName, "Details", "AccountModels", routeValues: new { id = mapping.Id }, htmlAttributes: null)
+                                </td>
+                                <td>
+                                    <span class="label label-default">@item.Type</span>
+                                </td>
+                                <td>
+                                    @Html.ActionLink(item.CourseName, "Details", new { id = item.CourseId })
+                                </td>
+                            </tr>
+                        }
+
+                    }
+                </table>
+
+            </div>
+
+        }
     </div>
 
 </div>
