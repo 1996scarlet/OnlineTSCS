@@ -181,6 +181,9 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\DPlayer.min.css" />
+    <Content Include="Content\t1.png" />
+    <Content Include="Content\t2.png" />
+    <Content Include="Content\t3.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

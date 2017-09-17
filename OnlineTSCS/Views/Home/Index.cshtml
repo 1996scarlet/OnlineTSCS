@@ -17,31 +17,31 @@
 <div class="row">
     <div class="col-sm-12 col-md-4">
         <div class="thumbnail">
-            <img src="..." alt="...">
+            <img src="~/Content/t1.png" alt="...">
             <div class="caption">
-                <h3>Thumbnail label</h3>
-                <p>...</p>
-                <p>@Html.ActionLink("前往个人中心", "Details", "AccountModels", routeValues: new { id = myId }, htmlAttributes: new { @class = "btn btn-primary btn-block" })</p>
+                <h3>课程、作业、记录</h3>
+                <p>在个人中心可以查看已选的课程，还可以查看个人活动记录，管理个人信息。</p>
+                <p>@Html.ActionLink("前往个人中心", "Details", "AccountModels", routeValues: new { id = myId }, htmlAttributes: new { @class = "btn btn-success btn-block" })</p>
             </div>
         </div>
     </div>
     <div class="col-sm-12 col-md-4">
         <div class="thumbnail">
-            <img src="..." alt="...">
+            <img src="~/Content/t3.png" alt="...">
             <div class="caption">
-                <h3>Thumbnail label</h3>
-                <p>...</p>
-                <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                <h3>在线弹幕交流</h3>
+                <p>我们为每个课程的视频都配备了弹幕播放器，通过和弹幕服务器进行连接可以通过弹幕进行在线版聊。</p>
+                <p>@Html.ActionLink("运行弹幕测试", "About", "Home", routeValues: null, htmlAttributes: new { @class = "btn btn-info btn-block" })</p>
             </div>
         </div>
     </div>
     <div class="col-sm-12 col-md-4">
         <div class="thumbnail">
-            <img src="..." alt="...">
+            <img src="~/Content/t2.png" alt="...">
             <div class="caption">
-                <h3>Thumbnail label</h3>
-                <p>...</p>
-                <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                <h3>课程论坛交流</h3>
+                <p>通过课程论坛方便教师和学生交流问题、研究问题和解决问题。</p>
+                <p>@Html.ActionLink("进入课程论坛", "Index", "ForumModels", routeValues: null, htmlAttributes: new { @class = "btn btn-warning btn-block" })</p>
             </div>
         </div>
     </div>

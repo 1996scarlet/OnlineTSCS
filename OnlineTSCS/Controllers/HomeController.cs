@@ -15,7 +15,7 @@ namespace OnlineTSCS.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "用于测试弹幕系统连接是否正常";
 
             return View();
         }

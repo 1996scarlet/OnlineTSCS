@@ -1,23 +1,23 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "弹幕测试页面";
 }
 @Scripts.Render("~/bundles/dplay")
-<h2>@ViewBag.Title.</h2>
+<h2>@ViewBag.Title</h2>
 <h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<p>Bad Apple!!</p>
 <div id="player1"></div>
 <script>
     var dp = new DPlayer({
         element: document.getElementById('player1'),
         video: {
-            url: 'https://api.prprpr.me/dplayer/video/bilibili?aid=14408656',
+            url: 'https://api.prprpr.me/dplayer/video/bilibili?aid=24722',
             pic: 'dplayer.png'
         },
         danmaku: {
             id: 'f896aeaasas7686b6f805e0834',
             api: 'https://api.prprpr.me/dplayer/',
-            addition: ['https://api.prprpr.me/dplayer/bilibili?cid=23508509']
+            addition: ['https://api.prprpr.me/dplayer/bilibili?cid=40689']
         }
     });
 </script>
