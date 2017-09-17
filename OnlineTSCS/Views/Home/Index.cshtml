@@ -1,31 +1,48 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "主页";
+    int myId = int.Parse(Session["Id"].ToString());
+    string myType = Session["Type"].ToString();
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<div class="jumbotron" style="background-color:lightskyblue">
+    <h1 style="color:white">Danmaku-MOOC</h1>
+    <p style="color:white" class="lead">基于弹幕交互技术的在线师生课程交流系统</p>
+</div>
+
+<div class="alert alert-info alert-dismissible fade in" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+    <strong>欢迎：</strong> 你的登录身份是 @myType 请自觉遵守文明上网公约
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    <div class="col-sm-12 col-md-4">
+        <div class="thumbnail">
+            <img src="..." alt="...">
+            <div class="caption">
+                <h3>Thumbnail label</h3>
+                <p>...</p>
+                <p>@Html.ActionLink("前往个人中心", "Details", "AccountModels", routeValues: new { id = myId }, htmlAttributes: new { @class = "btn btn-primary btn-block" })</p>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    <div class="col-sm-12 col-md-4">
+        <div class="thumbnail">
+            <img src="..." alt="...">
+            <div class="caption">
+                <h3>Thumbnail label</h3>
+                <p>...</p>
+                <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    <div class="col-sm-12 col-md-4">
+        <div class="thumbnail">
+            <img src="..." alt="...">
+            <div class="caption">
+                <h3>Thumbnail label</h3>
+                <p>...</p>
+                <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+            </div>
+        </div>
     </div>
 </div>

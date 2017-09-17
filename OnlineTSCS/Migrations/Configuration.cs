@@ -10,7 +10,6 @@ namespace OnlineTSCS.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
-            ContextKey = "OnlineTSCS.Models.OTSCSModel";
         }
 
         protected override void Seed(OnlineTSCS.Models.OTSCSModel context)

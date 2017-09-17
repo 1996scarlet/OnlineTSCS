@@ -1,0 +1,84 @@
+﻿@model OnlineTSCS.Models.HomeworkModel
+
+@{
+    ViewBag.Title = Model.Claim;
+
+    int myId = int.Parse(Session["Id"].ToString());
+}
+
+<div class="jumbotron" style="background-color:lightseagreen">
+    <h2 style="color:white">@ViewBag.Title</h2>
+    <p class="lead" style="color:white">
+        @Html.DisplayFor(model => model.Course.CourseName) -- 随堂作业
+    </p>
+</div>
+
+<hr />
+<blockquote class="panel-success">
+    <p>
+        @Html.DisplayNameFor(modelItem => Model.Course.CourseName) - @Html.ActionLink(Model.Course.CourseName, "Details", "CourseModels", routeValues: new { id = Model.CourseId }, htmlAttributes: null)
+    </p>
+    <p>
+        @Html.DisplayNameFor(modelItem => Model.StartDate) - @Html.DisplayFor(modelItem => Model.StartDate)&nbsp;&nbsp;&nbsp;&nbsp;@Html.DisplayNameFor(modelItem => Model.EndDate) - @Html.DisplayFor(modelItem => Model.EndDate)
+    </p>
+    <footer>所有人共 @Model.HomeworkComments.Count 次提交 &nbsp;&nbsp;&nbsp;&nbsp; 平均分数：</footer>
+</blockquote>
+
+<div class="page-header">
+
+    <h1 class="text-center">作业提交区  <small>你已提交 @Model.HomeworkComments.Count(x => x.Id == myId) 次</small></h1>
+    <hr />
+    <div class="alert alert-warning alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <strong>注意：超过规定时间不能提交作业!</strong> 特殊情况请与 @Html.ActionLink("授课教师", "Details", "AccountModels", routeValues: new { id = Model.Course.UploadId }, htmlAttributes: null) 联系
+    </div>
+    <div class="alert alert-info alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <strong>注意：学生用户在规定时间内可以提交多次!</strong> 每个人只能看到自己提交的作业
+    </div>
+    <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal" type="button">
+        提交作业
+    </button>
+</div>
+
+@foreach (var item in Model.HomeworkComments.Where(x => x.Id == myId))
+{
+    <hr />
+    <div class="media">
+        <div class="media-body">
+            <h4 class="media-heading">@Html.ActionLink(item.Account.AccountName, "Details", "AccountModels", routeValues: new { id = item.Id }, htmlAttributes: null) - @Html.DisplayFor(modelItem => item.PostDate)&nbsp;<span class="badge">@item.Score 分</span></h4>
+            <p class="text-muted">@Html.DisplayFor(modelItem => item.Content)</p>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        @using (Html.BeginForm("Comment", "HomeworkModels", routeValues: new { homeworkId = Model.HomeworkId }, method: FormMethod.Post))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">作业内容</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <div class="form">
+
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                @Html.TextArea("comment", "", htmlAttributes: new { @class = "form-control", rows = "5", maxlength = "251", placeholder = "请注意文明用语...." })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+                    <input type="submit" value="提交" class="btn btn-success" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>

@@ -1,0 +1,160 @@
+﻿@model OnlineTSCS.Models.CourseModel
+
+@{
+    ViewBag.Title = Model.CourseName;
+
+    var firstMap = Model.Mapping.FirstOrDefault();
+
+    bool flag = Model.Mapping.Any(x => x.Id == int.Parse(Session["Id"].ToString())) && Session["Type"].ToString() == "学生";
+}
+
+<div class="jumbotron" style="background-color:lemonchiffon">
+    <h1>@Model.CourseName</h1>
+    <h4>
+        <span class="label label-default">@Model.Type</span>
+        @if (firstMap != null)
+        {
+            <span class="label label-success">@firstMap.Account.School</span>
+            <span class="label label-info">主讲 @firstMap.Account.AccountName</span>
+        }
+        <span class="label label-warning">@Model.Lesson 课时</span>
+        <span class="label label-danger">当前人数 @Model.Mapping.Count / @Model.Capacity</span>
+    </h4>
+    <p>@Model.Description</p>
+    @if (flag)
+    {
+        <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal2" type="button">
+            开始学习 <span class="badge">@Model.Videos.Count 个视频</span>
+        </button>
+        <button class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal3" type="button">
+            查看作业 <span class="badge">@Model.Homeworks.Count 个作业</span>
+        </button>
+    }
+</div>
+
+<div>
+    @if (!flag && Session["Type"].ToString() == "学生")
+    {
+        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <strong>提示：你尚未选择这门课</strong> &nbsp; @Html.ActionLink("现在就去选课页面", "Pick", "CourseModels")
+
+        </div>
+    }
+
+    <blockquote>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+        <footer>看起来很厉害的句子<cite title="Source Title">哈工大 外语电台</cite></footer>
+    </blockquote>
+
+    <div class="page-header">
+        <h1 class="text-center">评论区  <small>@Model.CourseComments.Count 条评论</small></h1>
+        <hr />
+        <div class="alert alert-warning alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+            <strong>注意：请文明评论!</strong> 恶意污染评论区的用户会被管理员请去喝茶
+        </div>
+        <button class="btn btn-success btn-block" data-toggle="modal" data-target="#myModal" type="button">
+            发表评论
+        </button>
+    </div>
+
+
+    @foreach (var item in Model.CourseComments)
+    {
+        <div class="media">
+            <div class="media-left">
+                <a href="#">
+                    <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 64px; height: 64px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNWU4MGE0NmU5ZSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1ZTgwYTQ2ZTllIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMy4xNzk2ODc1IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true">
+                </a>
+            </div>
+            <div class="media-body">
+                <h5 class="media-heading">@item.Account.AccountName - @item.CommentDate</h5>
+                <p class="text-muted">@item.Comment</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        @using (Html.BeginForm("Comment", "CourseModels", routeValues: new { courseId = Model.CourseId }, method: FormMethod.Post))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">评论内容</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <div class="form">
+
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                @Html.TextArea("comment", "", htmlAttributes: new { @class = "form-control", placeholder = "请注意文明用语...." })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
+                    <input type="submit" value="发表" class="btn btn-success" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">视频列表</h4>
+            </div>
+            <div class="modal-body">
+                @foreach (var item in Model.Videos)
+                {
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="@Url.Action("Details", "VideoModels", routeValues: new { id = item.VideoId })">
+                                <img class="media-object" data-src="holder.js/192x108" alt="192x108" style="width: 182px; height: 112px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNWU4MGE0NmU5ZSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1ZTgwYTQ2ZTllIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMy4xNzk2ODc1IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true">
+                            </a>
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">@item.VideoName - @item.Course.CourseName</h4>
+                            <p class="text-muted">@item.Description</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel3">作业列表</h4>
+            </div>
+            <div class="modal-body">
+                @{ int counter = 0;}
+                @foreach (var item in Model.Homeworks)
+                {
+                    counter++;
+                    <div class="media">
+                        <div class="media-body">
+                            <h4 class="media-heading">作业 @counter：@Html.ActionLink(item.Claim, "Details", "HomeworkModels", routeValues: new { id = item.HomeworkId }, htmlAttributes: null)</h4>
+                            <p class="text-muted">开放时间：@item.StartDate -- 关闭时间：@item.EndDate</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

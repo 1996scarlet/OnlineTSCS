@@ -1,10 +1,10 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - 在线师生课程交流系统</title>
+    <title>@ViewBag.Title - 基于弹幕交互技术的在线师生课程交流系统</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -14,10 +14,9 @@
     {
         str = "欢迎，" + Session["AccountName"].ToString();
     }
-    ViewBag.Active = "active";
 }
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -29,10 +28,28 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("关于", "About", "Home")</li>
-                    <li>@Html.ActionLink("用户管理", "Index", "AccountModels")</li>
-                    <li>@Html.ActionLink("用户注册", "Register", "AccountModels")</li>
-                    <li>@Html.ActionLink("日志查询", "Index", "LogModels")</li>
+                    @switch ((string)Session["Type"])
+                    {
+                        case "学生":
+                            {
+                                <li>@Html.ActionLink("个人中心", "Details", "AccountModels", routeValues: new { id = int.Parse(Session["Id"].ToString()) }, htmlAttributes: null)</li>
+                                break;
+                            }
+                        case "教师":
+                            {
+                                <li>@Html.ActionLink("个人中心", "Details", "AccountModels", routeValues: new { id = int.Parse(Session["Id"].ToString()) }, htmlAttributes: null)</li>
+                                <li>@Html.ActionLink("课程管理", "Index", "CourseModels")</li>
+                                <li>@Html.ActionLink("视频管理", "Index", "VideoModels")</li>
+                                <li>@Html.ActionLink("作业管理", "Index", "HomeworkModels")</li>
+                                break;
+                            }
+                        default:
+                            {
+                                <li>@Html.ActionLink("用户管理", "Index", "AccountModels")</li>
+                                break;
+                            }
+                    }
+                    <li>@Html.ActionLink("课程论坛", "Index", "ForumModels")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     @if (str == "请先登录")
@@ -41,7 +58,7 @@
                     }
                     else
                     {
-                        <li>@Html.ActionLink("注销", "LogOff", "AccountModels", null, new { @class = "logout" })</li>
+                        <li>@Html.ActionLink("注销" + Session["Type"].ToString(), "LogOff", "AccountModels", null, new { @class = "logout" })</li>
                     }
                 </ul>
             </div>
@@ -51,7 +68,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 应用程序</p>
+            <p>&copy; @DateTime.Now.Year - 基于弹幕交互技术的在线师生课程交流系统</p>
         </footer>
     </div>
 

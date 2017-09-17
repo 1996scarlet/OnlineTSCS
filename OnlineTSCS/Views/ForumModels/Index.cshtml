@@ -1,0 +1,69 @@
+﻿@model IEnumerable<OnlineTSCS.Models.ForumModel>
+
+@{
+    ViewBag.Title = "课程论坛--同世界分享你的看法";
+}
+
+<div class="jumbotron" style="background-color:lightcoral">
+    <h2 style="color:white">@ViewBag.Title</h2>
+    <button class="btn btn-warning" data-toggle="modal" data-target="#myModal" type="button">
+        发  帖
+    </button>
+    <button class="btn btn-info" data-toggle="modal" data-target="#myModal" type="button">
+        搜  索
+    </button>
+    @Html.ActionLink("按名称排序", "Index", routeValues: new { mode = 0 }, htmlAttributes: new { @class = "btn btn-default" })
+    @Html.ActionLink("按时间排序", "Index", routeValues: new { mode = 1 }, htmlAttributes: new { @class = "btn btn-default" })
+    @Html.ActionLink("按回复排序", "Index", routeValues: new { mode = 2 }, htmlAttributes: new { @class = "btn btn-default" })
+</div>
+
+<div>
+    @foreach (var item in Model)
+    {
+        <hr />
+        <div class="media">
+            <div class="media-body">
+                <h4 class="media-heading">@Html.ActionLink(item.Title, "Details", new { id = item.ForumItemId })&nbsp;<span class="badge">@item.ForumComments.Count 回复</span></h4>
+                <p class="text-muted">@Html.DisplayFor(modelItem => item.Comment)</p>
+                <p class="media-bottom">
+                    @Html.ActionLink(item.Account.AccountName, "Details", "AccountModels", routeValues: new { id = item.Id }, htmlAttributes: null) - @Html.DisplayFor(modelItem => item.CommentDate)
+                </p>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        @using (Html.BeginForm("Posting", "ForumModels", routeValues: null, method: FormMethod.Post))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">发帖（请遵守文明上网条约）</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <div class="form">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                @Html.TextBox("title", "", htmlAttributes: new { @class = "form-control", pattern = ".{8,32}", placeholder = "标题8~32个字符" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                @Html.TextArea("comment", "", htmlAttributes: new { @class = "form-control", maxlength = "256", rows = "8", placeholder = "内容4~256个字符" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+                    <input type="submit" value="发表" class="btn btn-success" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>

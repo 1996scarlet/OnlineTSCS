@@ -1,0 +1,66 @@
+﻿@model OnlineTSCS.Models.CourseCommentModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CourseCommentModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Account.AccountName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Account.AccountName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Course.CourseName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Course.CourseName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CommentDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CommentDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Frozen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Frozen)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Reported)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Reported)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CourseCommentId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

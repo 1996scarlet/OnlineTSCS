@@ -1,0 +1,192 @@
+﻿@model IEnumerable<OnlineTSCS.Models.CourseModel>
+
+@{
+    ViewBag.Title = "学生选课";
+}
+
+<div class="jumbotron" style="background-color:darksalmon">
+    <h2 style="color:white">@ViewBag.Title</h2>
+    <p style="color:white" class="lead">随时可选 随时可退</p>
+</div>
+
+<div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">所有课程</a></li>
+        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">未选课程</a></li>
+        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">已选课程</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="home">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CourseName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Capacity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Lesson)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UploadId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.JudgeId)
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.CourseName, "Details", new { id = item.CourseId })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            <span class="label label-success">@item.Mapping.Count / @item.Capacity</span>
+                        </td>
+                        <td>
+                            <span class="label label-warning">@item.Lesson</span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.ActionLink("ID:" + item.UploadId, "Details", "AccountModels", routeValues: new { id = item.UploadId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                        </td>
+                        <td>
+                            @Html.ActionLink("ID:" + item.JudgeId, "Details", "AccountModels", routeValues: new { id = item.JudgeId }, htmlAttributes: new { @class = "btn btn-danger btn-xs" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        @{
+            var selected = Model.Where(x => ((List<int>)ViewBag.StudentPick).Contains(x.CourseId)).ToList();
+            var unselected = Model.Where(x => !((List<int>)ViewBag.StudentPick).Contains(x.CourseId)).ToList();
+        }
+        <div role="tabpanel" class="tab-pane fade" id="profile">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CourseName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Capacity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Lesson)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UploadId)
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+
+                @foreach (var item in unselected)
+            {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.CourseName, "Details", new { id = item.CourseId })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            <span class="label label-success">@item.Mapping.Count / @item.Capacity</span>
+                        </td>
+                        <td>
+                            <span class="label label-warning">@item.Lesson</span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.ActionLink("ID:" + item.UploadId, "Details", "AccountModels", routeValues: new { id = item.UploadId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                        </td>
+                        <td>
+                            @Html.ActionLink("选课", "Choose", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-danger btn-xs" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="messages">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CourseName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Capacity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Lesson)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UploadId)
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+
+                @foreach (var item in selected)
+            {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.CourseName, "Details", new { id = item.CourseId })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            <span class="label label-success">@item.Mapping.Count / @item.Capacity</span>
+                        </td>
+                        <td>
+                            <span class="label label-warning">@item.Lesson</span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.ActionLink("ID:" + item.UploadId, "Details", "AccountModels", routeValues: new { id = item.UploadId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                        </td>
+                        <td>
+                            @Html.ActionLink("退课", "Revoke", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: new { @class = "btn btn-danger btn-xs" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+
+</div>
+
+

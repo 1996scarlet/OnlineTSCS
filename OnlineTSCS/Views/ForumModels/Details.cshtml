@@ -1,0 +1,80 @@
+﻿@model OnlineTSCS.Models.ForumModel
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<div class="jumbotron" style="background-color:lightsalmon">
+    <h2 style="color:white">@ViewBag.Title</h2>
+    <p class="lead" style="color:white">
+        @Html.DisplayFor(model => model.Comment)
+    </p>
+</div>
+
+<hr />
+<blockquote class="panel-primary">
+    <p>
+        @Html.DisplayNameFor(modelItem => Model.Account.AccountName) - @Html.ActionLink(Model.Account.AccountName, "Details", "AccountModels", routeValues: new { id = Model.Account.Id }, htmlAttributes: null)
+    </p>
+    <p>
+        @Html.DisplayNameFor(modelItem => Model.CommentDate) - @Html.DisplayFor(modelItem => Model.CommentDate)
+    </p>
+    <footer>@Model.ForumComments.Count 条回复贴</footer>
+</blockquote>
+
+<div class="page-header">
+    <hr />
+    <div class="alert alert-warning alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <strong>注意：请文明评论!</strong> 恶意污染评论区的用户会被管理员请去喝茶
+    </div>
+    <button class="btn btn-success btn-block" data-toggle="modal" data-target="#myModal" type="button">
+        发表评论
+    </button>
+</div>
+
+@foreach (var item in Model.ForumComments)
+{
+    <div class="media">
+        <div class="media-left">
+            <a href="@Url.Action("Details", "AccountModels", routeValues: new { id = item.Id })">
+                <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 64px; height: 64px;" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PCEtLQpTb3VyY2UgVVJMOiBob2xkZXIuanMvNjR4NjQKQ3JlYXRlZCB3aXRoIEhvbGRlci5qcyAyLjYuMC4KTGVhcm4gbW9yZSBhdCBodHRwOi8vaG9sZGVyanMuY29tCihjKSAyMDEyLTIwMTUgSXZhbiBNYWxvcGluc2t5IC0gaHR0cDovL2ltc2t5LmNvCi0tPjxkZWZzPjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+PCFbQ0RBVEFbI2hvbGRlcl8xNWU4MGE0NmU5ZSB0ZXh0IHsgZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQgfSBdXT48L3N0eWxlPjwvZGVmcz48ZyBpZD0iaG9sZGVyXzE1ZTgwYTQ2ZTllIj48cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMy4xNzk2ODc1IiB5PSIzNi41Ij42NHg2NDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" data-holder-rendered="true">
+            </a>
+        </div>
+        <div class="media-body">
+            <h5 class="media-heading">@item.Account.AccountName - @item.CommentDate</h5>
+            <p class="text-muted">@item.Comment</p>
+        </div>
+    </div>
+}
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        @using (Html.BeginForm("Comment", "ForumModels", routeValues: new { forumItemId = Model.ForumItemId }, method: FormMethod.Post))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">评论内容</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <div class="form">
+
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                @Html.TextArea("comment", "", htmlAttributes: new { @class = "form-control", rows = "5", maxlength = "251", placeholder = "请注意文明用语...." })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+                    <input type="submit" value="发表" class="btn btn-success" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>

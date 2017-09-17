@@ -1,74 +1,464 @@
 ﻿@model OnlineTSCS.Models.AccountModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.AccountName;
+
+    var temp = 0;
+
+    bool flag = (int.Parse(Session["Id"].ToString()) == Model.Id);
 }
 
-<h2>Details</h2>
+<div class="jumbotron" style="background-image: url(&quot;//i0.hdslb.com/bfs/space/cd52d4ac1d336c940cc4958120170f7928d9e606.png@75Q.webp&quot;);">
+    <h2 style="color:white">@Model.AccountName</h2>
+    <h4>
+        <span class="label label-warning">@Model.Type.ToString()</span>
+        <span class="label label-success">@Html.DisplayFor(model => model.School)</span>
+        <span class="label label-info">@Html.DisplayNameFor(model => model.Email):@Html.DisplayFor(model => model.Email)</span>
+        <span class="label label-danger">@Html.DisplayNameFor(model => model.Credit):@Html.DisplayFor(model => model.Credit)</span>
+        <span class="label label-primary">@Html.DisplayNameFor(model => model.Mobile):@Html.DisplayFor(model => model.Mobile)</span>
+    </h4>
+</div>
+
+
+@if (!flag)
+{
+    <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal" type="button">
+        向TA提问/私信
+    </button>
+}
+else
+{
+    if (Session["Type"].ToString() == "学生")
+    {
+        @Html.ActionLink("选择课程", "Pick", "CourseModels", routeValues: null, htmlAttributes: new { @class = "btn btn-danger btn-block" })
+
+    }
+}
+
+<hr />
 
 <div>
-    <h4>AccountModel</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.AccountName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.AccountName)
-        </dd>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">TA的课程</a></li>
+        <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">TA的课程评论</a></li>
+        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">TA的视频评论</a></li>
+        <li role="presentation"><a href="#forum" aria-controls="forum" role="tab" data-toggle="tab">TA的主题帖</a></li>
+        <li role="presentation"><a href="#comment" aria-controls="comment" role="tab" data-toggle="tab">TA的回帖</a></li>
+    </ul>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Password)
-        </dt>
+    <div class="tab-content">
+        @{
+            var selected = Model.Mapping.Where(x => x.Id == Model.Id).Select(x => x.Course);
+        }
+        <div role="tabpanel" class="tab-pane fade in active" id="home">
+            <table class="table">
+                <tr>
+                    <th>
+                        课程名称
+                    </th>
+                    <th>
+                        课程类别
+                    </th>
+                    <th>
+                        课时
+                    </th>
+                    <th>
+                        容量
+                    </th>
+                    <th>
+                        开课时间
+                    </th>
+                    <th>
+                        主讲教师
+                    </th>
+                </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Password)
-        </dd>
+                @foreach (var item in selected)
+            {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.CourseName, "Details", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: null)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            <span class="label label-warning">@item.Lesson</span>
+                        </td>
+                        <td>
+                            <span class="label label-success">@item.Mapping.Count / @item.Capacity</span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StartDate)
+                        </td>
+                        <td>
+                            @Html.ActionLink("ID:" + item.UploadId, "Details", routeValues: new { id = item.UploadId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
+        <div role="tabpanel" class="tab-pane fade" id="profile">
 
-        <dd>
-            @Html.DisplayFor(model => model.Type)
-        </dd>
+            <table class="table">
+                <tr>
+                    <th>
+                        评论内容
+                    </th>
+                    <th>
+                        课程名称
+                    </th>
+                    <th>
+                        被举报
+                    </th>
+                    <th>
+                        被冻结
+                    </th>
+                    <th>
+                        评论时间
+                    </th>
+                </tr>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Credit)
-        </dt>
+                @foreach (var item in Model.CourseComments)
+            {
+                    <tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Credit)
-        </dd>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>
+                        <td>
+                            @Html.ActionLink(item.Course.CourseName, "Details", "CourseModels", routeValues: new { id = item.CourseId }, htmlAttributes: null)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Reported)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Frozen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CommentDate)
+                        </td>
+                    </tr>
+                }
+            </table>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.School)
-        </dt>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="messages">
+            <table class="table">
+                <tr>
+                    <th>
+                        评论内容
+                    </th>
+                    <th>
+                        视频名称
+                    </th>
+                    <th>
+                        被举报
+                    </th>
+                    <th>
+                        被冻结
+                    </th>
+                    <th>
+                        评论时间
+                    </th>
+                </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.School)
-        </dd>
+                @foreach (var item in Model.VideoComments)
+            {
+                    <tr>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Mobile)
-        </dt>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>
+                        <td>
+                            @Html.ActionLink(item.Video.VideoName, "Details", "VideoModels", routeValues: new { id = item.VideoId }, htmlAttributes: null)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Reported)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Frozen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CommentDate)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Mobile)
-        </dd>
+        <div role="tabpanel" class="tab-pane fade" id="forum">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
+            <table class="table">
+                <tr>
+                    <th>
+                        帖子标题
+                    </th>
+                    <th>
+                        回复数量
+                    </th>
+                    <th>
+                        被举报
+                    </th>
+                    <th>
+                        被冻结
+                    </th>
+                    <th>
+                        发帖时间
+                    </th>
+                </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
+                @foreach (var item in Model.ForumTitles)
+            {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.Title, "Details", "ForumModels", routeValues: new { id = item.ForumItemId }, htmlAttributes: null)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ForumComments.Count)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Reported)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Frozen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CommentDate)
+                        </td>
+                    </tr>
+                }
+            </table>
 
-    </dl>
+        </div>
+
+        <div role="tabpanel" class="tab-pane fade" id="comment">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        帖子标题
+                    </th>
+                    <th>
+                        回复内容
+                    </th>
+                    <th>
+                        被举报
+                    </th>
+                    <th>
+                        被冻结
+                    </th>
+                    <th>
+                        回复时间
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.ForumComments)
+            {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.ForumItems.Title, "Details", "ForumModels", routeValues: new { id = item.ForumItemId }, htmlAttributes: null)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Comment)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Reported)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Frozen)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CommentDate)
+                        </td>
+                    </tr>
+                }
+            </table>
+
+        </div>
+
+    </div>
 </div>
-<p>
-    @Html.ActionLink("删除", "Delete", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<hr />
+@if (flag)
+{
+    <div class="row">
+        <div class="col-lg-6 col-sm-6">
+            @Html.ActionLink("编辑个人信息", "Edit", routeValues: new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-success btn-block" })
+        </div>
+        <div class="col-lg-6 col-sm-6">
+            @Html.ActionLink("修改登录密码", "PasswordEdit", routeValues: new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-info btn-block" })
+        </div>
+    </div>
+    <hr />
+    <div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#receive" aria-controls="receive" role="tab" data-toggle="tab">收到的PM</a></li>
+            <li role="presentation"><a href="#send" aria-controls="send" role="tab" data-toggle="tab">发送的PM</a></li>
+        </ul>
+
+        <div class="tab-content">
+
+            <div role="tabpanel" class="tab-pane fade in active" id="receive">
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            PM来源
+                        </th>
+                        <th>
+                            内容
+                        </th>
+                        <th>
+                            被举报
+                        </th>
+                        <th>
+                            接收时间
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model.ReceivePMs)
+                {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(item.FromAccount.AccountName, "Details", "AccountModels", routeValues: new { id = item.FromId }, htmlAttributes: null)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Message)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Reported)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MessageDate)
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-xs" data-toggle="modal" data-target="#myModal2" onclick="@{temp = item.FromId;} " type="button">
+                                    回复
+                                </button>
+                            </td>
+                        </tr>
+    }
+                </table>
+
+            </div>
+
+            <div role="tabpanel" class="tab-pane fade" id="send">
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            PM去向
+                        </th>
+                        <th>
+                            内容
+                        </th>
+                        <th>
+                            被举报
+                        </th>
+                        <th>
+                            被冻结
+                        </th>
+                        <th>
+                            发送时间
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model.SendPMs)
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(item.ToAccount.AccountName, "Details", "AccountModels", routeValues: new { id = item.ToId }, htmlAttributes: null)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Message)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Reported)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Frozen)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MessageDate)
+                            </td>
+                        </tr>
+                    }
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+    }
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        @using (Html.BeginForm("Posting", "AccountModels", routeValues: new { toId = Model.Id }, method: FormMethod.Post))
+            {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">私信(PM)内容</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <div class="form">
+
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                @Html.TextArea("message", "", htmlAttributes: new { @class = "form-control", rows = "5", placeholder = "请注意文明用语...." })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+                    <input type="submit" value="发送" class="btn btn-success" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog modal-sm" role="document">
+        @using (Html.BeginForm("Reposting", "AccountModels", routeValues: new { toId = @temp }, method: FormMethod.Post))
+            {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel2">回复私信(PM)</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.AntiForgeryToken()
+                    <div class="form">
+
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                @Html.TextArea("message", "", htmlAttributes: new { @class = "form-control", rows = "5", placeholder = "请注意文明用语...." })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">关闭</button>
+                    <input type="submit" value="发送" class="btn btn-success" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>

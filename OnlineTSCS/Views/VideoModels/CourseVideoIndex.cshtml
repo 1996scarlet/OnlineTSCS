@@ -1,0 +1,82 @@
+﻿@model IEnumerable<OnlineTSCS.Models.VideoModel>
+
+@{
+    ViewBag.Title = "课程视频列表";
+}
+
+<h2>CourseVideoIndex</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Account.AccountName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Course.CourseName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UpLoadDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VideoName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BiliAid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BiliCid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Times)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Frozen)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reported)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Account.AccountName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Course.CourseName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UpLoadDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VideoName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BiliAid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BiliCid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Times)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Frozen)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Reported)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id=item.VideoId })
+        </td>
+    </tr>
+}
+
+</table>

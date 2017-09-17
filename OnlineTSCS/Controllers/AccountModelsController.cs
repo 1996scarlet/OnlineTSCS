@@ -32,6 +32,50 @@ namespace OnlineTSCS.Controllers
             return View(await accounts.ToListAsync());
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Posting(int toId, string message)
+        {
+            if (!String.IsNullOrEmpty(message))
+            {
+                db.PersonalMsgModels.Add(new PersonalMsgModel()
+                {
+                    FromId = int.Parse(Session["Id"].ToString()),
+                    ToId = toId,
+                    MessageDate = DateTime.Now,
+                    Message = message,
+                    Frozen = false,
+                    Reported = false
+                });
+                await db.SaveChangesAsync();
+
+            }
+
+            return RedirectToAction("Details", routeValues: new { id = toId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Reposting(int toId, string message)
+        {
+            if (!String.IsNullOrEmpty(message))
+            {
+                db.PersonalMsgModels.Add(new PersonalMsgModel()
+                {
+                    FromId = int.Parse(Session["Id"].ToString()),
+                    ToId = toId,
+                    MessageDate = DateTime.Now,
+                    Message = message,
+                    Frozen = false,
+                    Reported = false
+                });
+                await db.SaveChangesAsync();
+
+            }
+
+            return RedirectToAction("Details", routeValues: new { id = int.Parse(Session["Id"].ToString()) });
+        }
+
         // GET: AccountModels/Details/5
         public async Task<ActionResult> Details(int? id)
         {
@@ -122,7 +166,7 @@ namespace OnlineTSCS.Controllers
             {
                 db.Entry(accountModel).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", routeValues: new { id = accountModel.Id });
             }
             return View(accountModel);
         }
@@ -154,7 +198,8 @@ namespace OnlineTSCS.Controllers
                 accountModel.Password = accountModel.ConfirmPassword;
                 db.Entry(accountModel).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                return RedirectToAction("Details", routeValues: new { id = accountModel.Id });
             }
 
             ModelState.AddModelError("Password", "原密码错误");
@@ -218,6 +263,7 @@ namespace OnlineTSCS.Controllers
                 if (find != null)
                 {
                     Session["AccountName"] = accountModel.AccountName;
+                    Session["Id"] = find.Id.ToString();
                     Session["Type"] = accountModel.Type.ToString();
                     return RedirectToAction("Index", "Home");
                 }
@@ -227,7 +273,7 @@ namespace OnlineTSCS.Controllers
 
             return View(accountModel);
         }
-        
+
         [Authentication(Checked = false)]
         public ActionResult LogOff()
         {

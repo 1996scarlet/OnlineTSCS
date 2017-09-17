@@ -1,0 +1,84 @@
+﻿@model IEnumerable<OnlineTSCS.Models.CourseModel>
+
+@{
+    ViewBag.Title = "课程审核";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CourseName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Capacity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lesson)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Checked)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Frozen)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UploadId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.JudgeId)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lesson)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Checked)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Frozen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UploadId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JudgeId)
+            </td>
+            <td>
+                @Html.ActionLink("Pass", "Pass", new { id = item.CourseId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CourseId })
+            </td>
+        </tr>
+    }
+
+</table>
