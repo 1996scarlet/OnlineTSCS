@@ -42,11 +42,14 @@ namespace OnlineTSCS.Controllers
         // 详细信息，请参阅 https://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Mark([Bind(Include = "HomeworkCommentId,Id,HomeworkId,PostDate,Content,Frozen,Score")] HomeworkCommentModel homeworkCommentModel)
+        public async Task<ActionResult> Mark([Bind(Include = "HomeworkCommentId,Score")] HomeworkCommentModel homeworkCommentModel)
         {
-            if (ModelState.IsValid)
+            var finder = await db.HomeworkCommentModels.FindAsync(homeworkCommentModel.HomeworkCommentId);
+
+            if (finder != null)
             {
-                db.Entry(homeworkCommentModel).State = EntityState.Modified;
+                finder.Score = homeworkCommentModel.Score;
+                db.Entry(finder).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }

@@ -1,39 +1,31 @@
 ﻿@model OnlineTSCS.Models.HomeworkCommentModel
 
 @{
-    ViewBag.Title = "Mark";
+    ViewBag.Title = "作业评分";
 }
-
-<h2>Mark</h2>
-
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>HomeworkCommentModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.HomeworkCommentId)
-        @Html.HiddenFor(model => model.Id)
-        @Html.HiddenFor(model => model.HomeworkId)
-        @Html.HiddenFor(model => model.PostDate)
-        @Html.HiddenFor(model => model.Content)
-        @Html.HiddenFor(model => model.Frozen)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Score, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Score, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Score, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    <div class="jumbotron" style="background-color:yellowgreen">
+        <h2 style="color:white">@ViewBag.Title</h2>
+        <p style="color:white" class="lead">
+            @Model.Homework.Course.CourseName - @Model.Homework.Claim
+        </p>
+        <p style="color:white" class="lead">
+            学生答案：@Model.Content
+        </p>
+        @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.HomeworkCommentId)
+
+            @Html.LabelFor(model => model.Score, htmlAttributes: new { @class = "control-label sr-only" })
+            @Html.EditorFor(model => model.Score, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Score, "", new { @class = "text-danger" })
+
+            <input type="submit" value="确认评分" class="btn btn-default" />
         </div>
     </div>
 }

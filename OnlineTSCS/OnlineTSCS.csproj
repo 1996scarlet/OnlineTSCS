@@ -157,6 +157,7 @@
     <Compile Include="Controllers\CourseModelsController.cs" />
     <Compile Include="Controllers\ForumModelsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HomeworkCommentModelsController.cs" />
     <Compile Include="Controllers\HomeworkModelsController.cs" />
     <Compile Include="Controllers\LogModelsController.cs" />
     <Compile Include="Controllers\VideoModelsController.cs" />
@@ -274,6 +275,11 @@
     <Content Include="Views\HomeworkModels\Edit.cshtml" />
     <Content Include="Views\HomeworkModels\Index.cshtml" />
     <Content Include="Views\HomeworkModels\Mark.cshtml" />
+    <Content Include="Views\HomeworkCommentModels\Create.cshtml" />
+    <Content Include="Views\HomeworkCommentModels\Delete.cshtml" />
+    <Content Include="Views\HomeworkCommentModels\Details.cshtml" />
+    <Content Include="Views\HomeworkCommentModels\Edit.cshtml" />
+    <Content Include="Views\HomeworkCommentModels\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

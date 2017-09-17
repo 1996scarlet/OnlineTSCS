@@ -83,7 +83,7 @@
                                 @Html.ActionLink(homework.Homework.Claim, "Details", new { id = homework.HomeworkId })
                             </td>
                             <td>
-                                @Html.ActionLink("评分", "Mark", "HomeworkModels", routeValues: new { id = homework.HomeworkId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
+                                @Html.ActionLink("评分", "Mark", "HomeworkModels", routeValues: new { id = homework.HomeworkCommentId }, htmlAttributes: new { @class = "btn btn-info btn-xs" })
                             </td>
                         </tr>
                     }
