@@ -6,18 +6,33 @@
 <h3>@ViewBag.Message</h3>
 
 <p>Bad Apple!!</p>
-<div id="player1"></div>
+<div id="dplayer"></div>
 <script>
     var dp = new DPlayer({
-        element: document.getElementById('player1'),
+        element: document.getElementById('dplayer'),
         video: {
-            url: 'https://api.prprpr.me/dplayer/video/bilibili?aid=24722',
-            pic: 'dplayer.png'
+            url: 'http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
+            pic: 'demo.jpg'
         },
         danmaku: {
-            id: 'f896aeaasas7686b6f805e0834',
-            api: 'https://api.prprpr.me/dplayer/',
-            addition: ['https://api.prprpr.me/dplayer/bilibili?cid=40689']
+            id: 'demo',
+            api: 'https://api.prprpr.me/dplayer/'
         }
     });
 </script>
+<!--
+<script>
+        var dp = new DPlayer({
+            element: document.getElementById('player1'),
+            video: {
+                url: 'https://api.prprpr.me/dplayer/video/bilibili?aid=16298393',
+                pic: 'dplayer.png'
+            },
+            danmaku: {
+                id: 'demo',
+                api: 'https://api.prprpr.me/dplayer/',
+                addition: ['https://api.prprpr.me/dplayer/bilibili?cid=2659296']
+            }
+        });
+</script>
+    -->
